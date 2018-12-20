@@ -31,7 +31,48 @@ C) Understanding what each column is based on how it looks or interacts. This is
 
 - To discover which label it belongs to, sample items can be entered in.
 
-Label:
+Label: <- we use a different name, this is already an ML term
     - setExpectedDataTypes(string, int)
     - setColumnHeaderSamples(list)
     - setRelationshipWithAnotherLabel(LabelName, AddsTo, VeryStrict) (SubtractsFrom, IsEqual)
+
+With the label method, we do not need to auto-discover data-type, except in the context of the above classification.
+
+
+- We need a way to tell the classifier that the work it did was correct or wrong. It should then use this to learn.
+
+
+At the end, we have a list with every item labelled. We know the data types of the labelled items and we have a formula how we convert from the info there to a valid data type.
+
+
+- We have the functionality to merge lists of objects together
+
+ObjectList
+   - isThisTheSameList
+   - addListWithoutDuplicates(timelineLabel=)
+
+On Debit-Credit project, we want every line to clearly indicate what it's all about.
+
+Each line can be:
+
+    - An inflow from a customer
+    - A transfer betweeen bank accounts
+    - An outflow to a supplier
+    - A payment to a staff (salary, expenses or the like)
+
+We have a list of sales made. Each inflow should be compared to the list of sales to see if it matches. Each inflow also needs to be compared to the list of transasctions on other bank accounts to see if it matches. 
+
+We need to map features that are going to be the same across both lists.
+
+Searching for a pattern in another list based on an object in the other list
+
+ObjectList:
+    findObject(x.label1 similarTo y.label2 and x.)
+    matchToAnotherList(x.label1 similarTo y.label2 and x.label3 similarTo x.label4)
+
+For marketing
+- you have a list of ads, with all the associated numbers being features
+- we want to know when an ad is no longer profitable
+- we could set a threshold for feature combinations?
+- Each object can hold a time series of it's state.
+- You should be able to say that if an object will become not profitable in the next 3 days, you turn it off
