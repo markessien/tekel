@@ -27,4 +27,11 @@ Problem 2: Look at the features of an object and discover the data type
 
 C) Understanding what each column is based on how it looks or interacts. This is agnostic to the data type, e.g I could have a column with Dog, Black. They are both strings on the low-level, but they actually represent a more abstract type.
 
-Problem 3: 
+- We need a list of information labels. Each feature is mapped to that label. E.g Dog = Animal and Black = Color.
+
+- To discover which label it belongs to, sample items can be entered in.
+
+Label:
+    - setExpectedDataTypes(string, int)
+    - setColumnHeaderSamples(list)
+    - setRelationshipWithAnotherLabel(LabelName, AddsTo, VeryStrict) (SubtractsFrom, IsEqual)
