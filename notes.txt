@@ -1,0 +1,30 @@
+
+
+Problems to be solved
+
+
+Questions to be answered:
+ - Can ML be used to automatically discover the data-type based on a string
+
+
+API Structure
+-------
+
+- Objects exist
+- These Objects have attributes
+- These objects exist in lists
+
+
+
+A) Simple structuring and understanding
+Problem 1: identify if a particular list of objects is the same as another list. I.e list A1 may contain 
+only some items that are in list A2, but seeing the overlap will tell that it is actually the same list
+
+
+B) Finding data type
+Problem 2: Look at the features of an object and discover the data type
+
+
+C) Understanding what each column is based on how it looks or interacts. This is agnostic to the data type, e.g I could have a column with Dog, Black. They are both strings on the low-level, but they actually represent a more abstract type.
+
+Problem 3: 
