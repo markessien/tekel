@@ -76,3 +76,7 @@ For marketing
 - we could set a threshold for feature combinations?
 - Each object can hold a time series of it's state.
 - You should be able to say that if an object will become not profitable in the next 3 days, you turn it off
+
+
+
+- Each individual sub-parser should be online. E.g the date parser will work better as a human curated online tool than as anything else.
