@@ -1,6 +1,3 @@
-# tekel
-The Tekel Project
+TekelLib
 
-By Mark Essien
-
-Tekel is a predictor library
+The Tekel Library is an easy-to-use wrapper for Pandas, and other machine learning functions

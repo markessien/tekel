@@ -1,5 +1,0 @@
-
-
-
-class TekelObject(object):
-
