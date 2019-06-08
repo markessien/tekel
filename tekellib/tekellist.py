@@ -42,7 +42,7 @@ class TekelList(object):
     Attributes:
         data:           The pandas object. Avoid accessing directly
         list_name:      The name of this list
-        feature_list:   The list of features of the class
+        feature_list:   The list of features of the class (a.k.a the columns)
     """
 
     def __init__(self, list_name = "", feature_list = None, db_type="sqlite"):
@@ -83,7 +83,7 @@ class TekelList(object):
         if self.db_type == "sqlite":
             self.db = sqlite3.connect(db_file, timeout=10, check_same_thread=False)
             self.cursor = self.db.cursor()
-            die
+            die # sqlite support is not working
         else:
             if self.db_connection == None:
                 self.db_connection = mysql.connector.connect(user=self.db_user, 
@@ -99,7 +99,8 @@ class TekelList(object):
 
     def flatten_json(self, path):
         # this function will take an inner json inside an item
-        # and move it to the root of the list
+        # and move it to the root of the list. Notrimplemented
+        # but there is an implemented version in add_from_json
         pass
 
 
