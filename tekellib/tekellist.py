@@ -326,14 +326,11 @@ class TekelList(object):
         self.db_exec(query_str)
         self.commit_db()
 
-
-    # Will load all files in a folder
-    def load_files(self, folderName, detectOverlaps=False):
-        files = glob.glob(folderName + "*")
-        for filename in files:
-            self.loadFile(filename, detectOverlaps)
-
-    def total_from_db(self, filter=None):
+    def count(self, filter=None, from_db = True):
+        
+        if from_db == False:
+            print("In-Memory Counting Not implemented")
+            return
 
         cursor = self.get_cursor()
 
@@ -348,15 +345,6 @@ class TekelList(object):
         x = a[0][0]
         return x
 
-    def total(self):
-        return int(self.data.query("country_code == 'ZA'").count()[0])
-        # return len(self.data.index)
-
-    def get_count(self, exclude):
-        # .count(numeric_only=True)
-        # self.print_dbg("Count111:" + str())
-        return int(self.data.query("cleanups_done != 'website' and country_code == 'ZA'").count()[0])
-
     def __getitem__(self, key):
         """ Used to allow [ ] access of elements
 
@@ -369,12 +357,11 @@ class TekelList(object):
         return TekelObject(self.data[key])
 
     def name(self):
-        return self.listName
+        return self.list_name
     
     def verbose(self, str):
         self.print_dbg(str)
     
-
     def comma_features(self, fields = None):
         comma_features = ""
 
@@ -584,7 +571,7 @@ class TekelList(object):
                 self.print_dbg(sql)
                 cursor.execute(sql)
             else:
-                self.print_dbg("Item already in DB")
+                self.print_dbg("Item already in DB .Updating!")
                 print(self.feature_list)
                 # update
                 sql = "UPDATE %s SET %s WHERE %s='%s'" % (table_name, tobj.comma_features_values(fields_to_save), unique_id_feature, tobj.get_value_s(unique_id_feature))
