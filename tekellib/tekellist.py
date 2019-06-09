@@ -186,7 +186,7 @@ class TekelList(object):
         
 
     # Will load a single file
-    def load_from_csv(self, file_name):
+    def load_from_csv(self, file_name, delimiter=None, columns=None):
         """ Loads data from a provided CSV file. It will auto
             detect column mames.
 
@@ -195,18 +195,11 @@ class TekelList(object):
         Returns:
            None
         """
-        df = pd.read_csv(file_name)
+        df = pd.read_csv(file_name, delimiter=delimiter, names=columns)
         
+        # print("Columns:" + str(df.columns.values()))
         self.feature_list = list(map(lambda x: TekelFeature(x, TekelType.String, False, x), df.columns.values))
-
-        if not self.data.empty:
-            self.data = self.data.append(df)
-            self.data = self.data.drop_duplicates()
-        else:
-            self.data = df
-
-        self.data = self.data.astype({"id": str})
-
+        self.data = df
         self.print_dbg("Loaded file: " + file_name + " Shape:" + str(self.data.shape))
 
     def add(self, item):
