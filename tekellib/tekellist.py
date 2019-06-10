@@ -252,30 +252,12 @@ class TekelList(object):
         
 
 
-    def find_first_item(self, filter_criteria):
-        query_string = ""
-        i = 0
-        for key, value in filter_criteria.items():
-            if i > 0:
-                query_string = query_string + " and "    
+    def find(self, query_string):
 
-            if value == "!NULL":
-                query_string += key + " == " + str(key)
-            elif value == "NULL":
-                query_string += key + " != " + str(key)
-            else:    
-                query_string += key + " == '" + str(value) + "'"
-            i += 1
-
-        if query_string is None:
-            return None
-
-        self.print_dbg("QUERY:" + query_string)
         result = self.data.query(query_string)
         if result.empty:
             return None
-            
-        self.print_dbg("RESULT:" + str(result))
+
         return TekelObject(result.iloc[0], self.feature_list)
 
     def set_db_details(self, db_host, db_port, db_name, db_user, db_password, db_file=None):
