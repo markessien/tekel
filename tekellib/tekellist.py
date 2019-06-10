@@ -195,7 +195,7 @@ class TekelList(object):
         Returns:
            None
         """
-        df = pd.read_csv(file_name, delimiter=delimiter, names=columns)
+        df = pd.read_csv(file_name, delimiter=delimiter, names=columns, keep_default_na=False)
         
         # print("Columns:" + str(df.columns.values()))
         self.feature_list = list(map(lambda x: TekelFeature(x, TekelType.String, False, x), df.columns.values))
