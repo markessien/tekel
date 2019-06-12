@@ -297,7 +297,7 @@ class TekelList(object):
         self.cursor = self.get_cursor()
         
         query_str = "UPDATE " + self.table_name + " SET " + str(value_column) + "='" + str(new_value) + "' WHERE " + id_feature_name + "='" + str(id_value) + "'"
-        self.print_dbg(query_str)
+        self.print_dbg(COLORS.OKBLUE + query_str + COLORS.ENDC)
         self.db_exec(query_str)
         self.commit_db()
 
@@ -543,14 +543,14 @@ class TekelList(object):
             if not scanitem:
                 sql = "INSERT INTO %s(%s)" % (table_name, self.comma_features(fields_to_save))
                 sql = sql + "VALUES(%s)" % (tobj.comma_values(fields_to_save))
-                self.print_dbg(sql)
+                self.print_dbg(COLORS.OKGREEN + sql + COLORS.ENDC)
                 cursor.execute(sql)
             else:
                 self.print_dbg("Item already in DB .Updating!")
                 print(self.feature_list)
                 # update
                 sql = "UPDATE %s SET %s WHERE %s='%s'" % (table_name, tobj.comma_features_values(fields_to_save), unique_id_feature, tobj.get_value_s(unique_id_feature))
-                print(sql)
+                print(COLORS.OKBLUE + sql + COLORS.ENDC)
                 cursor.execute(sql)
 
             if index % 10 == 0:
