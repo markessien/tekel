@@ -75,7 +75,11 @@ class TekelList(object):
         self.db_connection = None
     
     def db_exec(self, str):
-        self.print_dbg("Running Query: " + str)
+
+        if self.cursor == None:
+            self.get_cursor()
+
+        self.print_dbg("Running Query: " + str[:100])
         self.cursor.execute(str)
 
     def get_cursor(self):
