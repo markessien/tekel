@@ -199,12 +199,34 @@ class TekelList(object):
         Returns:
            None
         """
+
+        if not os.path.isfile(file_name):
+            return False
+
         df = pd.read_csv(file_name, delimiter=delimiter, names=columns, keep_default_na=False)
         
         # print("Columns:" + str(df.columns.values()))
         self.feature_list = list(map(lambda x: TekelFeature(x, TekelType.String, False, x), df.columns.values))
         self.data = df
         self.print_dbg("Loaded file: " + file_name + " Shape:" + str(self.data.shape))
+
+        return True
+
+    def save_to_csv(self, file_path):
+        self.data.to_csv(file_path)
+
+    def add_values(self, columns, values):
+        t = TekelObject(None, None)
+
+        for i, column in enumerate(columns):
+            t.set_val(column, values[i])
+
+        self.add(t)
+
+    def add_value(self, column, value):
+        t = TekelObject(None, None)
+        t.set_val(column, value)
+        self.add(t)
 
     def add(self, item):
         self.data = self.data.append(item.get_dataframe())
@@ -258,10 +280,13 @@ class TekelList(object):
 
     def find(self, query_string):
 
-        result = self.data.query(query_string)
-        if result.empty:
+        try:
+            result = self.data.query(query_string)
+            if result.empty:
+                return None
+        except:
             return None
-
+            
         return TekelObject(result.iloc[0], self.feature_list)
 
     def set_db_details(self, db_host, db_port, db_name, db_user, db_password, db_file=None):
