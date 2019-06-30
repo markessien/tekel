@@ -553,7 +553,7 @@ class TekelList(object):
                                 os.getenv("DB_USER"), 
                                 os.getenv("DB_PASSWORD"))
 
-    def save_to_db(self, table_name, unique_id_feature = None, fields_to_save=None):
+    def save_to_db(self, table_name, unique_id_feature = None, fields_to_save=None, update_if_exists = True):
 
         self.table_name = table_name
         cursor = self.get_cursor()
@@ -575,14 +575,19 @@ class TekelList(object):
                 self.print_dbg(COLORS.OKGREEN + sql + COLORS.ENDC)
                 cursor.execute(sql)
             else:
-                self.print_dbg("Item already in DB .Updating!")
-                print(self.feature_list)
+                self.print_dbg("Item already in DB.")
+                # print(self.feature_list)
                 # update
-                sql = "UPDATE %s SET %s WHERE %s='%s'" % (table_name, tobj.comma_features_values(fields_to_save), unique_id_feature, tobj.get_value_s(unique_id_feature))
-                print(COLORS.OKBLUE + sql + COLORS.ENDC)
-                cursor.execute(sql)
 
-            if index % 10 == 0:
+                if update_if_exists:
+                    sql = "UPDATE %s SET %s WHERE %s='%s'" % (table_name, tobj.comma_features_values(fields_to_save), unique_id_feature, tobj.get_value_s(unique_id_feature))
+                    print(COLORS.OKBLUE + sql + COLORS.ENDC)
+                    cursor.execute(sql)
+                else:
+                    pass
+                    # print(self.feature_list)
+
+            if index % 40 == 0:
                 self.commit_db() # commit every 10th
 
         self.commit_db()
