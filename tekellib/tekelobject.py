@@ -67,7 +67,10 @@ class TekelObject(object):
        return self
 
     def __str__(self):
-        return str(self.get_value(self.features))
+        s = ""
+        for f in self.features:
+            s = s + ", " + self.get_value_s(f.feature_name)
+        return s
 
 
     def get_file_name(self, from_column):

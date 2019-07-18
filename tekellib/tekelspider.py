@@ -87,7 +87,7 @@ class TekelScraper(scrapy.Spider):
     custom_settings = {
         'HTTPCACHE_ENABLED' : True,
         'HTTPCACHE_EXPIRATION_SECS' : 0, # Set to 0 to never expire
-        'HTTPCACHE_DIR' : os.getenv("SCRAPY_CACHE"), # os.path.join("./", "scrapy_cache"),
+        'HTTPCACHE_DIR' : os.getenv("SCRAPY_CACHE"),
         'HTTPCACHE_GZIP' : True,
         'EXTENSIONS' : {'scrapy.extensions.closespider.CloseSpider': 300},
         'CLOSESPIDER_PAGECOUNT' : 500,
@@ -98,13 +98,6 @@ class TekelScraper(scrapy.Spider):
         # 'DOWNLOADER_MIDDLEWARES' : {'tekelspider.SeleniumMiddleware': 543, 'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 300, 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware' : 600}
         'DOWNLOADER_MIDDLEWARES' : {'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 300, 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware' : 600}
 
-        # 'DOWNLOADER_MIDDLEWARES' : {'tekellib.tekelspider.SeleniumMiddleware': 543},
-        # 'ITEM_PIPELINES' : {'scrapy.pipelines.files.FilesPipeline': 1},
-        # 'FILES_STORE' : os.path.join(DATA_FOLDER, "images")
-        # 'IMAGES_EXPIRES' : 90,
-        # 'IMAGES_THUMBS' : {'small': (50, 50), 'big': (270, 270)},
-        # 'IMAGES_MIN_HEIGHT' : 110,
-        # 'IMAGES_MIN_WIDTH' : 110
     }
 
     

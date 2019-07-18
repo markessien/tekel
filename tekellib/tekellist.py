@@ -333,8 +333,9 @@ class TekelList(object):
     def count(self, filter=None, from_db = True):
         
         if from_db == False:
-            print("In-Memory Counting Not implemented")
-            return
+            return len(self.data.index)
+            # print("In-Memory Counting Not implemented")
+            # return
 
         cursor = self.get_cursor()
 
@@ -475,7 +476,7 @@ class TekelList(object):
         self.s3bucket = bucket
         self.s3subfolder = subfolder
 
-    def scrape_website(self, obj, field_with_name, field_with_url, field_for_progress, target_folder, backup_to_s3, cache_folder, prefix_folder, group, img_callback, html_callback, use_webdriver, check_if_downloaded):
+    def scrape_website(self, obj, field_with_name, field_with_url, field_for_progress, target_folder, backup_to_s3, cache_folder, prefix_folder, use_webdriver, check_if_downloaded):
         # function will download the full website
         self.print_dbg(COLORS.OKGREEN + "Starting website download" + COLORS.ENDC)
         self.print_dbg("Object: " + str(obj))
@@ -487,17 +488,21 @@ class TekelList(object):
             self.s3bucket = None
 
         url = obj.get_value_s(field_with_url)
-        item_folder = obj.get_file_name(field_with_name)
-        first_letter = item_folder[0:1].lower()
-        website_folder = os.path.join(target_folder, first_letter, item_folder, prefix_folder)
+        website_folder = os.path.join(target_folder, prefix_folder)
         self.print_dbg(COLORS.OKBLUE + "Downloading: " + url + " to " + website_folder + COLORS.ENDC)
 
-        crawl_complete_file = os.path.join(website_folder, item_folder + ".crawlcomplete")
-        crawling_file = os.path.join(website_folder, item_folder + ".crawling")
-        error_file = os.path.join(website_folder, item_folder + ".crawlerror")
+        crawl_complete_file = os.path.join(target_folder, "scraper.crawlcomplete")
+        crawling_file = os.path.join(target_folder, "scraper.crawling")
+        error_file = os.path.join(target_folder, "scraper.crawlerror")
         
         if not os.path.exists(website_folder):
             os.makedirs(website_folder)
+
+        if not os.path.exists(cache_folder):
+            os.makedirs(cache_folder)
+
+        if not os.path.exists(os.path.join(cache_folder, 'image_cache')):
+            os.makedirs(os.path.join(cache_folder, 'image_cache'))
 
         should_download = True
         if check_if_downloaded:
@@ -523,7 +528,7 @@ class TekelList(object):
                                 err_file=error_file, 
                                 cache_folder = cache_folder,
                                 s3bucket=self.s3bucket, 
-                                s3path=self.s3subfolder + '/' + group + "/" + item_folder + "/" + prefix_folder,
+                                s3path=self.s3subfolder,
                                 use_webdriver=use_webdriver)
                 process.start()
 
