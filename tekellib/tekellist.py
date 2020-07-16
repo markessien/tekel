@@ -370,12 +370,18 @@ class TekelList(object):
     def comma_features(self, fields = None):
         comma_features = ""
 
-        for i, feature in enumerate(self.feature_list):
+        first_item = True
+        for feature in self.feature_list:
             if not feature.table_column_name in fields:
                 continue
 
-            if i: comma_features = comma_features + ","
-            comma_features = comma_features + feature.table_column_name
+            if first_item == True: 
+                comma_features = feature.table_column_name
+                first_item = False
+            else:
+                comma_features = comma_features + "," + feature.table_column_name
+                
+            
         return comma_features
 
     def load_from_db(self, table_name, order_by = None, where = None, limit=None):
@@ -575,6 +581,11 @@ class TekelList(object):
                 scanitem = self.cursor.fetchone() #retrieve the first row
 
             if not scanitem:
+                pd.set_option('display.expand_frame_repr', False)
+                # print(self.data)
+                # print("Fields to save: " + str(fields_to_save))
+                # print("Comma Features: " + self.comma_features(fields_to_save))
+                # print("Comma Values: " + tobj.comma_values(fields_to_save))
                 sql = "INSERT INTO %s(%s)" % (table_name, self.comma_features(fields_to_save))
                 sql = sql + "VALUES(%s)" % (tobj.comma_values(fields_to_save))
                 self.print_dbg(COLORS.OKGREEN + sql + COLORS.ENDC)

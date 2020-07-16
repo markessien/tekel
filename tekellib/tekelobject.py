@@ -166,12 +166,16 @@ class TekelObject(object):
     def comma_values(self, fields = None):
         comma = ""
         # print("Features:" + str(self.features))
+        first_item = True
         for i in range(len(self.item)):
             
             if not self.features[i].table_column_name in fields:
                 continue
 
-            if i: comma = comma + ","
+            if first_item == False: 
+                comma = comma + ","
+            
+            first_item = False
             
             if self.features[i].feature_type == TekelType.UniqueDigitID:
                 comma = comma + '"' + str(int(self.item[i])) + '"'
