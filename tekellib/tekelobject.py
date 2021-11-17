@@ -84,7 +84,8 @@ class TekelObject(object):
         Returns the value for the feature passed in
         TODO: Optimise this to avoid this loop. A lookup table
               will make it run way better
-        """ 
+        """
+
         return str(self.item[feature_name])
 
         print(self.features)
@@ -143,7 +144,7 @@ class TekelObject(object):
 
     def comma_features_values(self,  fields = None):
 
-        
+        is_first = True
         comma = ""
         # print("Columns:" + self.item["hotel_name"])
         # print("Features:" + str(self.features))
@@ -152,14 +153,16 @@ class TekelObject(object):
             
             if not self.features[i].table_column_name in fields:
                 continue
-
-            if i: comma = comma + ","
+            
+            if not is_first:
+                comma = comma + ","
             
             feature = self.features[i].table_column_name
             value = str(self.item[feature]).replace('"', '""')
             value = value.replace("'", "")
             
             comma = comma + feature + "='" + value + "'"
+            is_first = False
 
         return comma       
 
@@ -177,8 +180,11 @@ class TekelObject(object):
             
             first_item = False
             
+
             if self.features[i].feature_type == TekelType.UniqueDigitID:
                 comma = comma + '"' + str(int(self.item[i])) + '"'
+            elif str(self.item[i]) == "nan":
+                comma = comma + 'NULL'                
             else:
                 s = str(self.item[i]).replace('"', '""')
                 comma = comma + '"' + s + '"'

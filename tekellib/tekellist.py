@@ -94,6 +94,7 @@ class TekelList(object):
                                             password=self.db_password,
                                             host=self.db_host,
                                             database=self.db_name,
+                                            port=self.db_port,
                                             ssl_disabled=self.ssl_disabled)
 
             if self.cursor == None:
@@ -131,7 +132,7 @@ class TekelList(object):
     # Will load the list from a json file. It expects a json file
     # made up of repeating nodes, each with level of flat data.
     # Path should be like this /root/item/item
-    def add_from_json(self, json_data_text, path_to_list_node, items_to_flatten=None, on_added=None):
+    def add_from_json(self, json_data_text, path_to_list_node, items_to_flatten=None, on_added=None, print_columns=[]):
         
         # load the data to a dictionary
         self.json_data = json.loads(json_data_text)
@@ -166,6 +167,9 @@ class TekelList(object):
             for key, value in json_item.items():
                 item_dict[str(key)] = str(value)
                 columns.append(key)
+
+                if str(key) in print_columns:
+                    print(str(value) + " / ")
 
             data.append(item_dict)
 
@@ -564,7 +568,7 @@ class TekelList(object):
                                 os.getenv("DB_USER"), 
                                 os.getenv("DB_PASSWORD"))
 
-    def save_to_db(self, table_name, unique_id_feature = None, fields_to_save=None, update_if_exists = True):
+    def save_to_db(self, table_name, unique_id_feature = None, fields_to_save=None, update_if_exists = True, pre_save=None):
 
         self.table_name = table_name
         cursor = self.get_cursor()
@@ -582,6 +586,10 @@ class TekelList(object):
 
             if not scanitem:
                 pd.set_option('display.expand_frame_repr', False)
+
+                if pre_save:
+                    tobj = pre_save(tobj, is_update=False)
+
                 # print(self.data)
                 # print("Fields to save: " + str(fields_to_save))
                 # print("Comma Features: " + self.comma_features(fields_to_save))
@@ -596,6 +604,10 @@ class TekelList(object):
                 # update
 
                 if update_if_exists:
+
+                    if pre_save:
+                        tobj = pre_save(tobj, is_update=True)
+
                     sql = "UPDATE %s SET %s WHERE %s='%s'" % (table_name, tobj.comma_features_values(fields_to_save), unique_id_feature, tobj.get_value_s(unique_id_feature))
                     print(COLORS.OKBLUE + sql + COLORS.ENDC)
                     cursor.execute(sql)
